@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "Chocolate Brownie",
+    "category": "Brownies",
+    "description": "Rich chocolate brownie with a fudgy texture.",
+    "price": 350,
+    "unit": "Box",
+    "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=600",
+    "available": true
+  },
+  {
+    "id": 2,
+    "name": "Black Forest Cake",
+    "category": "Cakes",
+    "description": "Classic chocolate cake with cherries and cream.",
+    "price": 850,
+    "unit": "Kg",
+    "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600",
+    "available": true
+  },
+  {
+    "id": 3,
+    "name": "Chocolate Chip Cookies",
+    "category": "Cookies",
+    "description": "Homemade crunchy chocolate chip cookies.",
+    "price": 250,
+    "unit": "Box",
+    "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600",
+    "available": true
+  },
+  {
+    "id": 4,
+    "name": "Red Velvet Cupcakes",
+    "category": "Cupcakes",
+    "description": "Soft red velvet cupcakes with cream topping.",
+    "price": 400,
+    "unit": "Box",
+    "image": "https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=600",
+    "available": true
+  }
+]

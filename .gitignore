@@ -1,0 +1,27 @@
+# Terraform working directory
+**/.terraform/*
+
+# Terraform state
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+
+# Terraform variables
+terraform.tfvars
+*.auto.tfvars
+
+# Terraform override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Credentials
+gha-creds-*.json
+application_default_credentials.json
+
+# Environment files
+.env
+.env.*
+!.env.example
