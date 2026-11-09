@@ -4,7 +4,7 @@
     "name": "Chocolate Brownie",
     "category": "Brownies",
     "description": "Rich chocolate brownie with a fudgy texture.",
-    "price": 350,
+    "price": 400,
     "unit": "Box",
     "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=600",
     "available": true
