@@ -25,3 +25,6 @@ application_default_credentials.json
 .env
 .env.*
 !.env.example
+
+node_modules/
+.DS_Store
