@@ -1,0 +1,104 @@
+name: Moachu Bakehaus CI-CD
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+  REGION: ${{ vars.GCP_REGION }}
+  CLUSTER: ${{ vars.GKE_CLUSTER }}
+  GAR_REPOSITORY: ${{ vars.GAR_REPOSITORY }}
+
+jobs:
+
+  build-and-deploy:
+
+    name: Build and Deploy to GKE
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # Step 1: Checkout source code
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Step 2: Authenticate to GCP
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
+
+        with:
+          workload_identity_provider: ${{ vars.WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+
+      # Step 3: Install Google Cloud SDK
+
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v3
+
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+
+      # Step 4: Configure Docker authentication
+
+      - name: Configure Docker
+        run: |
+          gcloud auth configure-docker \
+            ${{ vars.GCP_REGION }}-docker.pkg.dev --quiet
+
+      # Step 5: Build Docker image
+
+      - name: Build Docker Image
+        run: |
+
+          IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${GAR_REPOSITORY}/moachu-bakehaus:${GITHUB_SHA}"
+
+          docker build -t "$IMAGE" .
+
+          echo "IMAGE=$IMAGE" >> "$GITHUB_ENV"
+
+      # Step 6: Push image to Artifact Registry
+
+      - name: Push Docker Image
+        run: |
+          docker push "$IMAGE"
+
+      # Step 7: Get GKE credentials
+
+      - name: Get GKE Credentials
+        uses: google-github-actions/get-gke-credentials@v2
+
+        with:
+          cluster_name: ${{ vars.GKE_CLUSTER }}
+          location: ${{ vars.GKE_ZONE }}
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+
+      # Step 8: Deploy to Kubernetes
+
+      - name: Deploy Application
+        run: |
+
+          kubectl set image deployment/moachu-bakehaus \
+            moachu-bakehaus="$IMAGE" \
+            -n moachu
+
+      # Step 9: Verify rollout
+
+      - name: Verify Deployment
+        run: |
+
+          kubectl rollout status deployment/moachu-bakehaus \
+            -n moachu \
+            --timeout=180s
+
+          kubectl get pods -n moachu
